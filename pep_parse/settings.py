@@ -1,5 +1,9 @@
-from datetime import datetime
 from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
+
+RESULTS = 'results'
+RESULTS_DIR = BASE_DIR / RESULTS
 
 BOT_NAME = 'pep_parse'
 
@@ -20,6 +24,6 @@ ITEM_PIPELINES = {
     'pep_parse.pipelines.PepParsePipeline': 300,
 }
 
-NOW = datetime.strftime(datetime.now(), '%Y-%m-%dT%H-%M-%S')
+DATETIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
 
-BASE_DIR = Path(__file__).parent.parent
+FILE_NAME = 'status_summary_{}.csv'

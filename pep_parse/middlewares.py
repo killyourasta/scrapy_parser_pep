@@ -1,13 +1,22 @@
 from scrapy import signals
 
 
-class PepParseSpiderMiddleware:
+class PepMainMiddleware:
 
     @classmethod
     def from_crawler(cls, crawler):
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
+        spider = cls()
+        crawler.signals.connect(
+            spider.spider_opened,
+            signal=signals.spider_opened
+        )
+        return spider
+
+    def spider_opened(self, spider):
+        spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class PepParseSpiderMiddleware(PepMainMiddleware):
 
     def process_spider_input(self, response, spider):
         return None
@@ -20,20 +29,11 @@ class PepParseSpiderMiddleware:
         pass
 
     def process_start_requests(self, start_requests, spider):
-        for r in start_requests:
-            yield r
-
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+        for request in start_requests:
+            yield request
 
 
-class PepParseDownloaderMiddleware:
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
+class PepParseDownloaderMiddleware(PepMainMiddleware):
 
     def process_request(self, request, spider):
         return None
@@ -43,6 +43,3 @@ class PepParseDownloaderMiddleware:
 
     def process_exception(self, request, exception, spider):
         pass
-
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)

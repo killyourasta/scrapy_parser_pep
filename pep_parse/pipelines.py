@@ -1,8 +1,12 @@
 import csv
+import datetime as dt
+from pathlib import Path
 
 from itemadapter import ItemAdapter
 
-from .settings import BASE_DIR, NOW
+from .settings import DATETIME_FORMAT, FILE_NAME
+
+BASE_DIR = Path(__file__).parent.parent
 
 
 class PepParsePipeline:
@@ -19,9 +23,11 @@ class PepParsePipeline:
             return item
 
     def close_spider(self, spider):
-        RESULTS_DIR = BASE_DIR / 'results'
+        RESULTS_DIR = BASE_DIR / 'results' # tests\test_main.py:17: AttributeError 
         RESULTS_DIR.mkdir(exist_ok=True)
-        filename = filename = "status_summary_" + NOW + ".csv"
+        now = dt.datetime.now()
+        now_format = now.strftime(DATETIME_FORMAT)
+        filename = FILE_NAME.format(now_format)
         with open(RESULTS_DIR / filename, mode='w', encoding='utf-8') as f:
             csv.writer(
                 f, dialect=csv.unix_dialect, quoting=csv.QUOTE_NONE
