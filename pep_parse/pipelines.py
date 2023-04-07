@@ -23,7 +23,8 @@ class PepParsePipeline:
             return item
 
     def close_spider(self, spider):
-        RESULTS_DIR = BASE_DIR / 'results' # tests\test_main.py:17: AttributeError 
+        # tests\test_main.py:17: AttributeError
+        RESULTS_DIR = BASE_DIR / 'results'
         RESULTS_DIR.mkdir(exist_ok=True)
         now = dt.datetime.now()
         now_format = now.strftime(DATETIME_FORMAT)
